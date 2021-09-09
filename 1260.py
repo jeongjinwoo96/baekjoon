@@ -20,17 +20,21 @@ def dfs(graph,root):
         n=stack.pop()
         if n not in visited:
             visited.append(n)
+            if n not in graph:
+                continue
             stack += sorted(graph[n]-set(visited),reverse=True)
     return visited
 
 def bfs(graph,root):
     visited =[]
-    q = deque([root]) 
+    q = deque([root])
     while q:
         n = q.popleft()
         if n not in visited:
             visited.append(n)
-            q += graph[n]-set(visited)
+            if n not in graph:
+                continue
+            q += sorted(graph[n]-set(visited))
     return visited
 
 for i in dfs(road,V):
