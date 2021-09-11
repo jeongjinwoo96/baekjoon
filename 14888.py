@@ -1,28 +1,23 @@
-import itertools
 N = int(input())
-A = list(input().split())
+A = list(map(int, input().split()))
 B = list(map(int, input().split()))
+answer = []
 
-if len(A) != N or len(B)!=4 or sum(B)!=N-1:
-    exit()
-op=[]
-for i in range(B[0]):
-    op.append('+')
-for i in range(B[1]):
-    op.append('-')
-for i in range(B[2]):
-    op.append('*')
-for i in range(B[3]):
-    op.append('//')
+def dfs(add, sub, mul, div, val, idx):
     
-op_list = list(itertools.permutations(op))
-m=A[0]
-sum_list = []
+    if idx == len(A):
+        answer.append(val)
+        return
+    if add >= 1:
+        dfs(add-1, sub, mul, div, val+A[idx], idx+1)
+    if sub >= 1:
+        dfs(add, sub-1, mul, div, val-A[idx], idx+1)
+    if mul >= 1:
+        dfs(add, sub, mul-1, div, val*A[idx], idx+1)
+    if div >= 1:
+        dfs(add, sub, mul, div-1, int(val/A[idx]), idx+1)
+    
+dfs(B[0],B[1],B[2],B[3],A[0],1)
 
-for o in op_list:
-    for i in range(N-1):
-        m = str(eval(m+o[i]+A[1+i]))
-    sum_list.append(m)
-    m=A[0]
-print(max(sum_list))
-print(min(sum_list))
+print(max(answer))
+print(min(answer))
