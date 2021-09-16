@@ -10,35 +10,25 @@ for _ in range(M):
         A[x] = [y]        
 # A = {1: [2, 3], 2: [3, 4]}
 
+visit = [0] * (N+1)
+
 def bfs(x,k):
-    visited = [False] * (N+1)
     q.append(x)
-    visited[x] = True
-    while k>0:
-        if not q:
-            break
-        x = q.popleft()
-        if x in A:
-            for w in A[x]:
-                if not visited[w]:
-                    visited[w] = True
-                    q.append(w)
-                else:
-                    visited[w] = False
-            k = k-1
-            
-    if q:
-        while True:
-            if visited[q[0]] ==False:
-                q.popleft()
-            else:
-                break
-    return
+    while q:
+        cur = q.popleft()
+        for idx in range(1,N+1):
+            if visit[idx] == 0 and cur in A and visit[cur] <= k:
+                if idx in A[cur]:
+                    q.append(idx)
+                    visit[idx] = visit[cur]+1
 
 bfs(X,K)
 
-if q:
-    for i in q:
-        print(i)
-else:
+result = False
+for idx in range(1,N+1):
+    if visit[idx] == K and idx !=X:
+        print(idx)
+        result = True
+
+if not(result):
     print(-1)
